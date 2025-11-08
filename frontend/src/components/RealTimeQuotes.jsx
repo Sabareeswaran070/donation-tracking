@@ -15,7 +15,7 @@ export default function RealTimeQuotes() {
 
   useEffect(() => {
     fetchQuote();
-    const interval = setInterval(fetchQuote, 60000); // update every 1 min
+    const interval = setInterval(fetchQuote, 60000);
     return () => clearInterval(interval);
   }, []);
 

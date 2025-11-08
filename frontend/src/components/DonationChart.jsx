@@ -9,7 +9,6 @@ export default function DonationChart({ donations }) {
     const map = {};
     if (!Array.isArray(donations)) return [];
     donations.forEach(d => {
-      // defensive: ensure date and amount exist and are primitive values
       const dateKey = d && d.date ? new Date(d.date).toLocaleDateString() : "Unknown";
       const amount = d && typeof d.amount === 'number' ? d.amount : Number(d && d.amount) || 0;
       map[dateKey] = (map[dateKey] || 0) + amount;
@@ -28,12 +27,9 @@ export default function DonationChart({ donations }) {
     ]
   };
 
-  // If data is empty or invalid, render a helpful message instead of the chart
   const hasValidData = Array.isArray(data.datasets) && data.datasets[0].data.some(d => typeof d === 'number' && !isNaN(d));
 
-  // Debugging: log incoming props and computed values so we can catch unexpected objects
   if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
     console.log('DonationChart debug:', { donations, dailyTotals, data, hasValidData });
   }
 

@@ -21,6 +21,8 @@ export default function DonationTable({ donations, onDelete }) {
       setSelectedDonation(null);
     } catch (error) {
       console.error('Delete failed:', error);
+      setShowConfirmModal(false);
+      setSelectedDonation(null);
     } finally {
       setDeletingId(null);
     }

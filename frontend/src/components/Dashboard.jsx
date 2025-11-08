@@ -48,7 +48,6 @@ export default function Dashboard() {
 
       <section className="table-section">
         <h2>Recent Donations</h2>
-        {/* Create donor form */}
         <div className="create-donation">
           <h3>Add Donation</h3>
           <CreateDonationForm onCreated={fetchData} />
@@ -56,12 +55,32 @@ export default function Dashboard() {
 
         <DonationTable donations={donations} onDelete={async (id) => {
           try {
-            await deleteDonation(id);
-            // refresh data
+            console.log('Attempting to delete donation with ID:', id);
+            const response = await deleteDonation(id);
+            console.log('Delete response:', response);
             fetchData();
+            alert('Donation deleted successfully!');
           } catch (err) {
-            console.error('Delete failed', err);
-            alert('Failed to delete donation');
+            console.error('Delete failed - Full error:', err);
+            console.error('Error response:', err.response?.data);
+            console.error('Error status:', err.response?.status);
+            
+            let errorMessage = 'Failed to delete donation';
+            
+            if (err.response?.status === 404) {
+              errorMessage = 'This donation no longer exists (may have been deleted already)';
+              fetchData();
+            } else if (err.response?.status === 400) {
+              errorMessage = 'Invalid donation ID';
+            } else if (err.response?.data?.message) {
+              errorMessage += `: ${err.response.data.message}`;
+            } else if (err.response?.status) {
+              errorMessage += ` (Status: ${err.response.status})`;
+            } else if (err.message) {
+              errorMessage += `: ${err.message}`;
+            }
+            
+            alert(errorMessage);
           }
         }} />
       </section>
@@ -98,12 +117,10 @@ function CreateDonationForm({ onCreated }) {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
     
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
     
-    // Clear messages when user starts typing
     if (message.text) {
       setMessage({ type: '', text: '' });
     }
@@ -127,7 +144,6 @@ function CreateDonationForm({ onCreated }) {
       setMessage({ type: 'success', text: 'Donation added successfully!' });
       if (onCreated) onCreated();
       
-      // Clear success message after 3 seconds
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
     } catch (err) {
       console.error('Create donation failed', err);
