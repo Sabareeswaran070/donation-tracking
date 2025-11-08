@@ -34,4 +34,16 @@ router.post('/', async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+// DELETE /api/donations/:id
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const donation = await Donation.findByIdAndDelete(id);
+    if (!donation) return res.status(404).json({ message: 'Donation not found' });
+    res.json({ message: 'Donation deleted', id });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 module.exports = router;
