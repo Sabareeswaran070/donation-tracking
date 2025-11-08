@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/donation-tracking/static/css/main.88b144d4.css",
+    "main.js": "/donation-tracking/static/js/main.2ead2741.js",
+    "index.html": "/donation-tracking/index.html",
+    "main.88b144d4.css.map": "/donation-tracking/static/css/main.88b144d4.css.map",
+    "main.2ead2741.js.map": "/donation-tracking/static/js/main.2ead2741.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.88b144d4.css",
+    "static/js/main.2ead2741.js"
+  ]
+}
